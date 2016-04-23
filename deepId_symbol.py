@@ -35,4 +35,13 @@ def get_symbol(num_class = 100):
 	relu4 = mx.symbol.Activation(data=bn4, act_type="relu", name="relu4")
 	pool4 = mx.symbol.Pooling(data=relu4, pool_max="max", kernel=(2, 2), stride=(2, 2), name="pool4")
 
-	
+	# flatten concat
+	pool3_flatten = mx.symbol.Flatten(data=pool3, name="pool3_flatten")
+	conv4_flatten = mx.symbol.Flatten(data=conv4, name="conv4_flatten")
+	pool3_conv4_flatten_concat = mx.symbol.Concat(data=[pool3, conv4], num_args=2, dim=1, name="concat")
+
+	# deepId(fully connect)
+	deep_id_1 = mx.symbol.FullyConnected(data=pool3_conv4_flatten_concat, num_hidden=160, name="deep_id_1")
+	fc1 = mx.symbol.FullyConnected(data=deep_id_1, num_hidden=num_class, name="fc1")
+	softmax = mx.symbol.SoftmaxOutput(data=fc1, name="softmax")
+	return softmax
