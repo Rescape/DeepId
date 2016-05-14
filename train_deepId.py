@@ -56,12 +56,13 @@ parser.add_argument('--val-dataset', type=str, default="val.rec",
 # todo statistic about mean data
 
 def get_iterator(args, kv):
+    data_shape = (3, 47, 55)
     train = mx.io.ImageRecordIter(
-        path_imgrec = os.path.join(args.data_dir, args.train_dataset),
+        path_imgrec = os.path.join(args.data_dir, "train.bin"),
         # mean_r      = 123.68,
         # mean_g      = 116.779,
         # mean_b      = 103.939,
-        # data_shape  = data_shape,
+        data_shape  = data_shape,
         batch_size  = args.batch_size,
         rand_crop   = True,
         rand_mirror = True,
@@ -69,13 +70,13 @@ def get_iterator(args, kv):
         part_index  = kv.rank)
 
     val = mx.io.ImageRecordIter(
-        path_imgrec = os.path.join(args.data_dir, args.val_dataset),
+        path_imgrec = os.path.join(args.data_dir, "test.bin"),
         # mean_r      = 123.68,
         # mean_g      = 116.779,
         # mean_b      = 103.939,
         rand_crop   = False,
         rand_mirror = False,
-        # data_shape  = data_shape,
+        data_shape  = data_shape,
         batch_size  = args.batch_size,
         num_parts   = kv.num_workers,
         part_index  = kv.rank)
