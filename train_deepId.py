@@ -54,6 +54,8 @@ parser.add_argument('--load-epoch', type=int,
                     help="load the model on an epoch using the model-prefix")
 parser.add_argument('--save-model-prefix', type=str,
                     help='the prefix of the model to save')
+parser.add_argument('--num-examples', type=int, default=60000,
+                    help='the number of training examples')
 # todo statistic about mean data
 args = parser.parse_args()
 
@@ -62,7 +64,7 @@ net = deepId_symbol.get_symbol(num_class = 1595)
 
 
 def get_iterator(args, kv):
-    data_shape = (3, 47, 55)
+    data_shape = (3, 55, 47)
     train = mx.io.ImageRecordIter(
         path_imgrec = os.path.join(args.data_dir, "train.bin"),
         # mean_r      = 123.68,
