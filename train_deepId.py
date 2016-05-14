@@ -1,10 +1,11 @@
 import mxnet as mx
 import logging
 import argparse
+import os
 from deepId_symbol import get_symbol 
 
 parser = argparse.ArgumentParser(description='train an face classifer using DeepId model')
-parser.add_argument('--save-model-prefix', type=str,
+parser.add_argument('--model-prefix', type=str,
                     help='the prefix of the model to save')
 parser.add_argument('--num-epochs', type=int, default=20,
                     help='the number of training epochs')
@@ -43,20 +44,21 @@ parser.add_argument('--clip-gradient', type=float, default=5.,
 
 
 # data dir
-parser.add_argument('--data-dir', type=str, required=True,
+parser.add_argument('--data-dir', type=str, default="youtube_face/",
                     help='the input data directory')
 # need log to file?
 parser.add_argument('--log-dir', type=str, default="/tmp/",
                     help='directory of the log file')
-parser.add_argument('--train-dataset', type=str, default="train.rec",
-                    help='train dataset name')
-parser.add_argument('--val-dataset', type=str, default="val.rec",
-                    help="validation dataset name")
 
+parser.add_argument('--load-epoch', type=int,
+                    help="load the model on an epoch using the model-prefix")
+parser.add_argument('--save-model-prefix', type=str,
+                    help='the prefix of the model to save')
 # todo statistic about mean data
+args = parser.parse_args()
 
 import deepId_symbol
-net = deepId_symbol.get_symbol(num-classes = 1595)
+net = deepId_symbol.get_symbol(num_class = 1595)
 
 
 def get_iterator(args, kv):
@@ -88,5 +90,5 @@ def get_iterator(args, kv):
     return (train, val)
 
 import train_model
-train_model.model.fit(args, net, get_iterator)
+train_model.fit(args, net, get_iterator)
 
