@@ -55,6 +55,10 @@ parser.add_argument('--val-dataset', type=str, default="val.rec",
 
 # todo statistic about mean data
 
+import deepId_symbol
+net = deepId_symbol.get_symbol(num-classes = 1595)
+
+
 def get_iterator(args, kv):
     data_shape = (3, 47, 55)
     train = mx.io.ImageRecordIter(
