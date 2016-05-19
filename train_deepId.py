@@ -2,7 +2,8 @@ import mxnet as mx
 import logging
 import argparse
 import os
-from deepId_symbol import get_symbol 
+from deepId_symbol import get_symbol
+import pdb 
 
 parser = argparse.ArgumentParser(description='train an face classifer using DeepId model')
 parser.add_argument('--model-prefix', type=str,
@@ -66,19 +67,22 @@ net = deepId_symbol.get_symbol(num_class = 1595)
 def get_iterator(args, kv):
     data_shape = (3, 55, 47)
     train = mx.io.ImageRecordIter(
-        path_imgrec = os.path.join(args.data_dir, "train.bin"),
+        path_imgrec = os.path.join(args.data_dir, "train.rec"),
+        path_imglist = os.path.join(args.data_dir, "train.lst"),
         # mean_r      = 123.68,
         # mean_g      = 116.779,
         # mean_b      = 103.939,
         data_shape  = data_shape,
         batch_size  = args.batch_size,
-        rand_crop   = True,
-        rand_mirror = True,
+        scale = 1./255,
+        shuffle   = True,
+        mirror = True,
         num_parts   = kv.num_workers,
         part_index  = kv.rank)
 
     val = mx.io.ImageRecordIter(
-        path_imgrec = os.path.join(args.data_dir, "test.bin"),
+        path_imgrec = os.path.join(args.data_dir, "test.rec"),
+        path_imglist = os.path.join(args.data_dir, "test.lst"),
         # mean_r      = 123.68,
         # mean_g      = 116.779,
         # mean_b      = 103.939,
@@ -88,7 +92,7 @@ def get_iterator(args, kv):
         batch_size  = args.batch_size,
         num_parts   = kv.num_workers,
         part_index  = kv.rank)
-
+    # pdb.set_trace()
     return (train, val)
 
 import train_model

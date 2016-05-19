@@ -78,7 +78,7 @@ def fit(args, network, data_loader, batch_end_callback=None):
         initializer        = mx.init.Xavier(factor_type="in", magnitude=2.34),
         **model_args)
 
-    eval_metrics = ['crossEntropy']
+    eval_metrics = ['acc']
 
     if batch_end_callback is not None:
         if not isinstance(batch_end_callback, list):
